@@ -71,7 +71,12 @@ def main(argv):
         remote_certificate = get_remote_certificate(host, args.port)
         remote_certificate = remote_certificate.replace(':', '')
         tlsa_field = get_tlsa(host, args.port)
-        print host + ' ' + str(tlsa_field == remote_certificate)
+        is_good_certificate = (tlsa_field == remote_certificate)
+        print host + ' ' + str(is_good_certificate)
+        if tlsa_field == remote_certificate:
+            sys.exit(0)
+        else:
+            sys.exit(2)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
