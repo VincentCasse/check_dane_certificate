@@ -56,7 +56,7 @@ def main(argv):
         prog='check_dane_validity',
         description='Check if DANE field equals to server certificate')
     parser.add_argument(
-        '-s', '--host',
+        '-H', '--host',
         nargs='+',
         help='host to check')
     parser.add_argument(
@@ -67,16 +67,19 @@ def main(argv):
         help='port with ssl certificate')
     args = parser.parse_args()
 
+    global_verification = True
     for host in args.host:
         remote_certificate = get_remote_certificate(host, args.port)
         remote_certificate = remote_certificate.replace(':', '')
         tlsa_field = get_tlsa(host, args.port)
         is_good_certificate = (tlsa_field == remote_certificate)
         print host + ' ' + str(is_good_certificate)
-        if tlsa_field == remote_certificate:
-            sys.exit(0)
-        else:
-            sys.exit(2)
+        global_verification = (global_verification & is_good_certificate)
+
+    if global_verification:
+        sys.exit(0)
+    else:
+        sys.exit(2)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

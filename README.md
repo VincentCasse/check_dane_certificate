@@ -10,5 +10,12 @@ You can have more informations on http://www.bortzmeyer.org/6698.html.
 
 # How to check example.com
 
-    python check_dane.py -s example.com
+    python check_dane.py -H example.com
     example.com True
+
+If you want to test multiples servers in the same time, you can chain it
+
+	python check_dane.py -H example.com toto.com
+    example.com True
+    toto.com True
+
